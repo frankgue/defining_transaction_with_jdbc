@@ -33,4 +33,20 @@ public class AccountServiceJdbcTxImplWithSpring implements AccountService {
             DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
+
+    @Override
+    @Transactional
+    public void depostMoney(Long accountId, double amount) {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("UPDATE  account SET balance = balance + " + amount + " WHERE id = " + accountId);
+
+            System.out.println("Depot effectué avec succès.");
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+    }
 }

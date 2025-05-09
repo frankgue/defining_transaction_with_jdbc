@@ -16,6 +16,7 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 
@@ -63,7 +64,15 @@ public class Ch6Configuration {
     public AccountService accountService(AccountDao accountDao) {
         AccountServiceImpl bean = new AccountServiceImpl();
         bean.setAccountDao(accountDao);
+        bean.setTransactionTemplate(transactionTemplate());
         return bean;
+    }
+
+    @Bean
+    public TransactionTemplate transactionTemplate(){
+        TransactionTemplate transactionTemplate = new TransactionTemplate();
+        transactionTemplate.setTransactionManager(transactionManager());
+        return transactionTemplate;
     }
 
 
