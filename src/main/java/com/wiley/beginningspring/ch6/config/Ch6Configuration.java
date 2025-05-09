@@ -19,7 +19,6 @@ import java.util.Properties;
 @ComponentScan("com.wiley.beginningspring.ch6")
 public class Ch6Configuration {
 
-/*
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
@@ -30,6 +29,7 @@ public class Ch6Configuration {
         return ds;
     }
 
+/*
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(){
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -44,6 +44,7 @@ public class Ch6Configuration {
 
         return entityManagerFactoryBean;
     }
+*/
 
 
     @Bean
@@ -62,6 +63,5 @@ public class Ch6Configuration {
         transactionManager.setDataSource(dataSource());
         return transactionManager;
     }
-*/
 
 }
