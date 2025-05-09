@@ -1,5 +1,7 @@
 package com.wiley.beginningspring.ch6.config;
 
+import com.wiley.beginningspring.ch6.service.AccountService;
+import com.wiley.beginningspring.ch6.service.AccountServiceJdbcTxImplWithSpring;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -8,15 +10,13 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
-@ComponentScan("com.wiley.beginningspring.ch6")
+@EnableTransactionManagement
 public class Ch6Configuration {
 
     @Bean
@@ -28,24 +28,6 @@ public class Ch6Configuration {
         ds.setPassword("");
         return ds;
     }
-
-/*
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(){
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.wiley.beginningspring.ch6.model");
-        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-
-        Properties jpaProperties = new Properties();
-        jpaProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-        jpaProperties.setProperty("hibernate.hbm2ddl.auto", "update");
-        entityManagerFactoryBean.setJpaProperties(jpaProperties);
-
-        return entityManagerFactoryBean;
-    }
-*/
-
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
@@ -62,6 +44,13 @@ public class Ch6Configuration {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
         transactionManager.setDataSource(dataSource());
         return transactionManager;
+    }
+
+    @Bean
+    public AccountService accountService(){
+        AccountServiceJdbcTxImplWithSpring bean = new AccountServiceJdbcTxImplWithSpring();
+        bean.setDataSource(dataSource());
+        return bean;
     }
 
 }
