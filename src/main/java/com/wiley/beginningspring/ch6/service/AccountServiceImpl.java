@@ -30,4 +30,21 @@ public class AccountServiceImpl implements AccountService {
         accountDao.update(sourceAccount);
         accountDao.update(targetAccount);
     }
+
+  /*  @Override
+    public void transferMoney(
+            long sourceAccountId, long targetAccountId, double amount) {
+//...
+    }
+    @Override
+    @Transactional(rollbackFor=Exception.class)
+    public void depositMoney(long accountId, double amount) throws Exception {
+//...
+    }
+    @Override
+    @Transactional(readOnly=true)
+    public Account getAccount(long accountId) {
+//...
+    }*/
+
 }
