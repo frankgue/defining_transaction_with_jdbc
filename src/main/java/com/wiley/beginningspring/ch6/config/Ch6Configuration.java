@@ -1,11 +1,15 @@
 package com.wiley.beginningspring.ch6.config;
 
+import com.wiley.beginningspring.ch6.dao.AccountDao;
+import com.wiley.beginningspring.ch6.dao.AccountDaoJdbcImpl;
 import com.wiley.beginningspring.ch6.service.AccountService;
+import com.wiley.beginningspring.ch6.service.AccountServiceImpl;
 import com.wiley.beginningspring.ch6.service.AccountServiceJdbcTxImplWithSpring;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -40,17 +44,27 @@ public class Ch6Configuration {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(){
+    public JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(dataSource());
+    }
+    @Bean
+    public AccountDao accountDao() {
+        return new AccountDaoJdbcImpl(dataSource());
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
         transactionManager.setDataSource(dataSource());
         return transactionManager;
     }
 
     @Bean
-    public AccountService accountService(){
-        AccountServiceJdbcTxImplWithSpring bean = new AccountServiceJdbcTxImplWithSpring();
-        bean.setDataSource(dataSource());
+    public AccountService accountService(AccountDao accountDao) {
+        AccountServiceImpl bean = new AccountServiceImpl();
+        bean.setAccountDao(accountDao);
         return bean;
     }
+
 
 }
